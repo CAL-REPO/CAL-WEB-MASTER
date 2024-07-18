@@ -75,55 +75,8 @@ for git_repo in "${GIT_REPOSITORIES[@]}"; do
 done
 
 # Initialize local repositories with specified branches
-for git_repo_info in "${GIT_REPO_BRANCH_LIST[@]}"; do
-    IFS=',' read -r GIT_REPO_NAME GIT_REPO_REMOTE_NAME GIT_BRANCH_NAME LOCAL_DIR <<< "$git_repo_info"
+for git_repo_detailed in "${GIT_REPO_DETAILED_LIST[@]}"; do
+    IFS=',' read -r GIT_REPO_NAME GIT_REPO_REMOTE_NAME GIT_BRANCH_NAME LOCAL_DIR <<< "$git_repo_detailed"
     echo "Initializing local repository for $GIT_REPO_NAME in $LOCAL_DIR with branch $GIT_BRANCH_NAME"
     initialize_local_repo "$GIT_REPO_NAME" "$GIT_REPO_REMOTE_NAME" "$GIT_BRANCH_NAME" "$LOCAL_DIR"
 done
-
-
-# # Function to pull, merge, and push a specific subtree branch
-# pull_merge_push_subtree_branch() {
-#     local BRANCH_NAME=$1
-#     local DIRECTORY=$2
-#     local GIT_REPO_REMOTE_NAME=$3
-
-#     # Ensure directory exists
-#     mkdir -p "$DIRECTORY"
-
-#     # Fetch latest updates from remote
-#     git fetch $GIT_REPO_REMOTE_NAME
-
-#     # Check if branch exists remotely
-#     if git ls-remote --exit-code --heads $GIT_REPO_REMOTE_NAME $BRANCH_NAME; then
-#         git checkout $BRANCH_NAME
-#         # Try pulling the latest changes from the remote subtree
-#         if ! git subtree pull --prefix="$DIRECTORY" $GIT_REPO_REMOTE_NAME $BRANCH_NAME -m "Merge changes from $BRANCH_NAME into $DIRECTORY"; then
-#             echo "Conflict detected while merging changes from $BRANCH_NAME into $DIRECTORY. Please resolve conflicts manually."
-#             exit 1
-#         fi
-#     else
-#         # Branch does not exist remotely, create it
-#         git checkout -b $BRANCH_NAME
-#         git subtree push --prefix="$DIRECTORY" $GIT_REPO_REMOTE_NAME $BRANCH_NAME
-#     fi
-
-#     # Check for changes in the directory
-#     if [ -n "$(git status --porcelain "$DIRECTORY")" ]; then
-#         # Add and commit changes in the directory
-#         git add "$DIRECTORY"
-#         git commit -m "Update directory $DIRECTORY in branch $BRANCH_NAME"
-#     else
-#         echo "No changes to commit in directory $DIRECTORY for branch $BRANCH_NAME."
-#     fi
-
-#     # Push the subtree to the remote repository
-#     git subtree push --prefix="$DIRECTORY" $GIT_REPO_REMOTE_NAME $BRANCH_NAME
-# }
-
-# # Copy pre-push script into .git/hooks directory
-# cp "$SCRIPT_DIR/pre-push" ".git/hooks/pre-push"
-# chmod +x ".git/hooks/pre-push"
-
-# # Configure Git to use HTTPS with the personal access token
-# configure_git_remote_https "$GIT_USER_NAME" "$GIT_USER_TOKEN" "$GIT_REPO_NAME"

@@ -44,10 +44,8 @@ for git_repo in "${GIT_REPOSITORIES[@]}"; do
 done
 
 # Delete local .git directories for specified branches
-for repo_info in "${GIT_REPO_BRANCH_LIST[@]}"; do
-    IFS=',' read -r GIT_REPO_NAME GIT_REPO_REMOTE_NAME GIT_BRANCH_NAME LOCAL_DIR <<< "$repo_info"
+for git_repo_detailed in "${GIT_REPO_DETAILED_LIST[@]}"; do
+    IFS=',' read -r GIT_REPO_NAME GIT_REPO_REMOTE_NAME GIT_BRANCH_NAME LOCAL_DIR <<< "$git_repo_detailed"
     echo "Deleting local .git directory for $GIT_REPO_NAME in $LOCAL_DIR"
     delete_local_git_directory "$LOCAL_DIR"
 done
-
-echo "All specified repositories have been processed."

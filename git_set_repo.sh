@@ -18,7 +18,11 @@ repository_exists() {
 create_repository() {
     local GIT_REPO_NAME=$1
     local IS_PUBLIC=$2
-    gh repo create "$GIT_USER_NAME/$GIT_REPO_NAME" --${IS_PUBLIC:+"public"}${IS_PUBLIC:+"private"} --confirm
+    if [ "$IS_PUBLIC" = "true" ]; then
+        gh repo create "$GIT_USER_NAME/$GIT_REPO_NAME" --public --confirm
+    else
+        gh repo create "$GIT_USER_NAME/$GIT_REPO_NAME" --private --confirm
+    fi
 }
 
 # Function to initialize the local repository and create a branch

@@ -1,0 +1,9 @@
+# If you wanna move secret file location, move to other directory and revise file location on PRE_PUSH_SCRUPT directory files.
+
+0.SECRET/*
+
+# Relate to terraform
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
